@@ -8,7 +8,7 @@ https://github.com/nodejs/node-gyp#on-windows   OR
 
 
 install node v16
-install Ganache
+install Ganache (for local blockchain)
 
 npm install -g truffle@5.5.2
 
