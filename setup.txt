@@ -7,7 +7,7 @@ https://techblog.geekyants.com/decentralized-kyc-on-blockchain-a-case-study
 https://github.com/nodejs/node-gyp#on-windows   OR
 
 
-install node v16
+install node v18
 install Ganache (for local blockchain)
 
 npm install -g truffle@5.5.2
