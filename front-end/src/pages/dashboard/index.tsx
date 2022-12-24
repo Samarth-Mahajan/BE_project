@@ -8,29 +8,15 @@ import { SearchBox } from "../../components/search-box";
 import { useApi } from "../../hooks/useApi";
 import { useAuthContext } from "../../contexts/auth-context";
 import { KycRequest, KycServices } from "../../repository";
-import {
-  countCase,
-  countCaseCustomer,
-  toastError,
-  toastSuccess,
-} from "../../utils";
+import { countCase, countCaseCustomer, toastError, toastSuccess } from "../../utils";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Pagination } from "../../components";
 
 export const Dashboard = () => {
-  const [searchResult, setSearchResult] = useState<KycRequest>(
-    {} as KycRequest
-  );
-  const [searchResultExist, setSearchResultExists] = useState<
-    "yes" | "no" | "pending"
-  >("pending");
+  const [searchResult, setSearchResult] = useState<KycRequest>({} as KycRequest);
+  const [searchResultExist, setSearchResultExists] = useState<"yes" | "no" | "pending">("pending");
   const [searchText, setSearchText] = useState("");
-  const {
-    listLoading,
-    searchBanks,
-    handlePaginationCustomer,
-    getBankKycRequests,
-  } = useApi();
+  const { listLoading, searchBanks, handlePaginationCustomer, getBankKycRequests } = useApi();
   const {
     state: { data, fetchedData, totalPageNumber, pageNo },
   } = useAuthContext();
@@ -51,8 +37,7 @@ export const Dashboard = () => {
 
   useEffect(() => {
     const { search } = state;
-    search.length !== 0 &&
-      handlePaginationCustomer(+search.slice(-1), fetchedData, totalPageNumber);
+    search.length !== 0 && handlePaginationCustomer(+search.slice(-1), fetchedData, totalPageNumber);
   }, [state]);
 
   const searchOperation = async () => {
@@ -80,57 +65,32 @@ export const Dashboard = () => {
   }, []);
 
   const listenToEvent = async () => {
-    KycServices.eventContract.on(
-      "DataHashPermissionChanged",
-      async (reqId, customerId, bankId, status) => {
-        console.log("event", bankId);
-        getBankKycRequests(pageNo);
-        toastSuccess("Data permission changed successfully");
-      }
-    );
+    KycServices.eventContract.on("DataHashPermissionChanged", async (reqId, customerId, bankId, status) => {
+      console.log("event", bankId);
+      getBankKycRequests(pageNo);
+      toastSuccess("Data permission changed successfully");
+    });
   };
 
   return (
     <Layout>
       <Box margin={7}>
         <VStack space={4} mb={8}>
-          <Text
-            textTransform={"capitalize"}
-            fontWeight={"semibold"}
-            fontSize={"lg"}
-            color="white">
+          <Text textTransform={"capitalize"} fontWeight={"semibold"} fontSize={"lg"} color="white">
             My Dashboard
           </Text>
           <HStack space={10} flexDirection={["column", "row"]}>
             <CaseCount count={data.length} heading={"Registered Cases"} />
-            <CaseCount
-              count={countCaseCustomer(data as KycRequest[]).rejected}
-              heading={"Rejected Cases"}
-            />
-            <CaseCount
-              count={countCaseCustomer(data as KycRequest[]).approved}
-              heading={"Approved Cases"}
-            />
+            <CaseCount count={countCaseCustomer(data as KycRequest[]).rejected} heading={"Rejected Cases"} />
+            <CaseCount count={countCaseCustomer(data as KycRequest[]).approved} heading={"Approved Cases"} />
           </HStack>
         </VStack>
         <VStack>
-          <HStack
-            alignItems={"center"}
-            justifyContent={"space-between"}
-            flexDirection={["column", "row"]}
-            mb={5}>
-            <Text
-              textTransform={"capitalize"}
-              fontWeight={"semibold"}
-              fontSize={"lg"}
-              color="white">
+          <HStack alignItems={"center"} justifyContent={"space-between"} flexDirection={["column", "row"]} mb={5}>
+            <Text textTransform={"capitalize"} fontWeight={"semibold"} fontSize={"lg"} color="white">
               My Individual Cases
             </Text>
-            <SearchBox
-              searchText={searchText}
-              setSearchText={setSearchText}
-              searchOperation={searchOperation}
-            />
+            <SearchBox searchText={searchText} setSearchText={setSearchText} searchOperation={searchOperation} />
           </HStack>
           <VStack alignItems={"center"} space={5} width="100%">
             <Box width={["90vw", "100%"]} overflow={["scroll", "unset"]}>
@@ -139,11 +99,8 @@ export const Dashboard = () => {
                 <Spinner size="lg" />
               ) : (
                 searchResultExist === "pending" &&
-                ([...data].reverse() as KycRequest[]).map(
-                  (item: KycRequest) => <DetailsCard item={item} />
-                )
+                ([...data].reverse() as KycRequest[]).map((item: KycRequest) => <DetailsCard item={item} />)
               )}
-              ?
             </Box>
 
             {searchResultExist === "yes" && <DetailsCard item={searchResult} />}

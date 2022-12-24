@@ -17,40 +17,22 @@ export function Links() {
   } = useAuthContext();
   const { connect } = useAuth();
   return (
-    <HStack
-      flexDir={["column", "row"]}
-      space={"5"}
-      alignItems={"center"}
-      mr="5"
-    >
-      <NavLink
-        className={(navData) => (navData.isActive ? "link-active" : "link")}
-        to="/dashboard"
-      >
+    <HStack flexDir={["column", "row"]} space={"5"} alignItems={"center"} mr="5">
+      <NavLink className={(navData) => (navData.isActive ? "link-active" : "link")} to="/dashboard">
         <Text color="white" fontSize="lg">
           Dashboard
         </Text>
       </NavLink>
-      <Link
-        mx="4"
-        my={["4", "0"]}
-        isExternal
-        href="https://blog.geekyants.com/"
-        isUnderlined={false}
-      >
+      <Link mx="4" my={["4", "0"]} isExternal href="#" isUnderlined={false}>
         <Text color="white" fontSize="lg">
           Contact Us
         </Text>
       </Link>
-      <Link
-        isExternal
-        href="https://geekyants.com/#footer"
-        isUnderlined={false}
-      >
+      {/* <Link isExternal href="#" isUnderlined={false}>
         <Text color="white" mr={["0", "3"]} fontSize="lg">
           Blog
         </Text>
-      </Link>
+      </Link> */}
       {role === Role.Customer && (
         <Pressable onPress={() => navigate("/profile")}>
           <FiUpload size={25} color="white" style={{ marginRight: "20px" }} />
@@ -61,18 +43,10 @@ export function Links() {
         size="lg"
         mt={["5", "0"]}
         rightIcon={
-          <BiDownArrow
-            color="#67e8f9"
-            display={
-              role === Role.Bank || role === Role.Customer ? "block" : "none"
-            }
-          />
+          <BiDownArrow color="#67e8f9" display={role === Role.Bank || role === Role.Customer ? "block" : "none"} />
         }
         onPress={() =>
-          isUserLoggedIn
-            ? (role === Role.Customer || role === Role.Bank) &&
-              navigate("/profile")
-            : connect()
+          isUserLoggedIn ? (role === Role.Customer || role === Role.Bank) && navigate("/profile") : connect()
         }
         variant={"outline"}
       >
